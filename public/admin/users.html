@@ -43,10 +43,12 @@
               <div class="form-group">
                 <label class="form-image">
                   <input id="avatar" type="file">
-                  <img src="../assets/img/default.png">
+                  <img src="../assets/img/default.png" id="previewImg">
                   <i class="mask fa fa-upload"></i>
                 </label>
               </div>
+              <!-- 隐藏域 -->
+              <input type="hidden" name="avatar" id="hidden">
             </div>
             <div class="form-group">
               <label>邮箱</label>
@@ -62,22 +64,23 @@
             </div>
             <div class="form-group">
               <div class="radio-inline">
-                <label><input type="radio" name="status" value="0">未激活</label>
+                <label><input type="radio" name="status" value="0" id="status0">未激活</label>
               </div>
               <div class="radio-inline">
-                <label><input type="radio" name="status" value="1">激活</label>
+                <label><input type="radio" name="status" value="1" id="status1">激活</label>
               </div>
             </div>
             <div class="form-group">
               <div class="radio-inline">
-                <label><input type="radio" name="role" value="admin">超级管理员</label>
+                <label><input type="radio" name="role" value="admin" id="admin">超级管理员</label>
               </div>
               <div class="radio-inline">
-                <label><input type="radio" name="role" value="normal">普通用户</label>
+                <label><input type="radio" name="role" value="normal" id="normal">普通用户</label>
               </div>
             </div>
             <div class="form-group">
-              <button class="btn btn-primary" type="submit">添加</button>
+              <button class="btn btn-primary" type="button" id="btnAdd">添加</button>
+              <button class="btn btn-primary" type="button" id="btnEdit" style="display: none;">修改</button>
             </div>
           </form>
         </div>
@@ -98,43 +101,8 @@
                 <th class="text-center" width="100">操作</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td class="text-center"><input type="checkbox"></td>
-                <td class="text-center"><img class="avatar" src="../assets/img/default.png"></td>
-                <td>coder@itcast.cn</td>
-                <td>coder</td>
-                <td>激活</td>
-                <td>普通用户</td>
-                <td class="text-center">
-                  <a href="javascript:;" class="btn btn-default btn-xs">编辑</a>
-                  <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-                </td>
-              </tr>
-              <tr>
-                <td class="text-center"><input type="checkbox"></td>
-                <td class="text-center"><img class="avatar" src="../assets/img/default.png"></td>
-                <td>coder@itcast.cn</td>
-                <td>coder</td>
-                <td>激活</td>
-                <td>普通用户</td>
-                <td class="text-center">
-                  <a href="javascript:;" class="btn btn-default btn-xs">编辑</a>
-                  <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-                </td>
-              </tr>
-              <tr>
-                <td class="text-center"><input type="checkbox"></td>
-                <td class="text-center"><img class="avatar" src="../assets/img/default.png"></td>
-                <td>coder@itcast.cn</td>
-                <td>coder</td>
-                <td>激活</td>
-                <td>普通用户</td>
-                <td class="text-center">
-                  <a href="javascript:;" class="btn btn-default btn-xs">编辑</a>
-                  <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-                </td>
-              </tr>
+            <tbody id="userBox">
+             
             </tbody>
           </table>
         </div>
@@ -181,7 +149,33 @@
 
   <script src="../assets/vendors/jquery/jquery.js"></script>
   <script src="../assets/vendors/bootstrap/js/bootstrap.js"></script>
-  <script>NProgress.done()</script>
+  <script src="../assets/js/common.js"></script>
   <script src="../assets/js/user.js"></script>
-</body>
+  <!-- 引入 template-web.js文件 -->
+  <script src="../assets/vendors/art-template/template-web.js"></script>
+  <!-- 准备渲染页面 -->
+  <script  type = "text/html" id="userTpl">
+  {{each data}}
+    <tr>
+        <td class="text-center"><input type="checkbox"></td>
+        <td class="text-center">
+          {{if $value.avatar}}
+          <img class="avatar" src="{{$value.avatar}}">
+          {{else}}
+          <img src="../assets/img/default.png" class ='avatar'>
+          {{/if}}
+        </td>
+        <td>{{$value.email}}</td>
+        <td>{{$value.nickName}}</td>
+        <td>{{$value.status == 1 ? '激活' : '未激活'}}</td>
+        <td>{{$value.role == 'admin' ? '超级管理员' : '普通用户'}}</td>
+        <td class="text-center">
+          <a href="javascript:;" class="btn btn-default btn-xs edit" data-id="{{$value._id}}">编辑</a>
+          <a href="javascript:;" class="btn btn-danger btn-xs del" data-id="{{$value._id}}">删除</a>
+        </td>
+      </tr>
+      {{/each}}
+    </script>
+    <script>NProgress.done()</script>
+  </body>
 </html>
